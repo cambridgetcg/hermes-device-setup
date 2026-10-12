@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "captured_on": "2026-10-12",
+  "hermes": {
+    "repository": "https://github.com/cambridgetcg/hermes-agent.git",
+    "observed_commit": "73162b00eefde3794bed0afb53d84a19c0eed230",
+    "policy": "Reference runtime, not automatically installed or downgraded. Require profile distributions and native plugins."
+  },
+  "workbench": {
+    "repository": "https://github.com/cambridgetcg/agent-workbench.git",
+    "commit": "dd81715763ce8f61090c7907427aac61088969c0"
+  },
+  "codex": {
+    "observed_version": "0.156.1",
+    "credential_store": "file",
+    "policy": "Local ChatGPT login per device; no credentials are distributed."
+  },
+  "platforms": ["macOS", "Linux"],
+  "python_requires": ">=3.11"
+}

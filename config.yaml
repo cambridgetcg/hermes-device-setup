@@ -1,0 +1,21 @@
+{
+  "model": {"default": "gpt-6-astra", "provider": "chatgpt-subscription"},
+  "providers": {
+    "chatgpt-subscription": {
+      "name": "ChatGPT subscription via Codex login",
+      "api": "https://chatgpt.com/backend-api/codex",
+      "transport": "codex_responses",
+      "default_model": "gpt-6-astra",
+      "key_cmd": "false",
+      "discover_models": false,
+      "models": {"gpt-6-astra": {}}
+    }
+  },
+  "agent": {"reasoning_effort": "ultra", "max_turns": 60},
+  "auth": {"adopt_external_logins": false},
+  "terminal": {"backend": "local"},
+  "platform_toolsets": {"cli": ["hermes-cli"]},
+  "telemetry": {"shared_metrics": {"enabled": false, "send": false}},
+  "auxiliary": {"title_generation": {"model_upgrade_enabled": false, "provider": "custom:chatgpt-subscription"}},
+  "plugins": {"enabled": [], "disabled": []}
+}

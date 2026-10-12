@@ -1,0 +1,20 @@
+# Only reviewed source enters this repository.
+*
+!.gitignore
+!AGENTS.md
+!README.md
+!distribution.yaml
+!config.yaml
+!SOUL.md
+!setup-lock.json
+!templates/
+!templates/config.json
+!templates/terminal-init.sh
+!scripts/
+!scripts/setup_device.py
+!tests/
+!tests/test_setup.py
+!tests/native_smoke.py
+!.github/
+!.github/workflows/
+!.github/workflows/check.yml
