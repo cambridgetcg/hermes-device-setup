@@ -1,6 +1,6 @@
 name: astra-ultra
-version: 1.0.0
-description: Private portable Hermes Astra Ultra setup for macOS and Linux.
+version: 1.1.0
+description: Portable Hermes Astra Ultra setup for macOS and Linux.
 author: cambridgetcg
 distribution_owned:
   - distribution.yaml

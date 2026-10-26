@@ -1,4 +1,5 @@
 import importlib.util
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -12,6 +13,35 @@ ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location("setup_device", ROOT / "scripts/setup_device.py")
 setup = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(setup)
+
+
+def assert_tuned_settings(test, config):
+    """The five settings verified on 2026-10-26 (README: Since 1.1.0)."""
+    model = config["providers"]["chatgpt-subscription"]["models"]["gpt-6-astra"]
+    test.assertEqual(model, {"supports_vision": True, "context_length": 872000})
+    test.assertIs(model["supports_vision"], True)
+    test.assertIs(type(model["context_length"]), int)
+    test.assertEqual(config["compression"], {"threshold": 0.6})
+    test.assertEqual(config["browser"], {"inactivity_timeout": 900})
+    test.assertEqual(set(config["platform_hints"]), {"cli"})
+    hint = config["platform_hints"]["cli"]["append"]
+    test.assertTrue(hint.startswith("When work splits into independent parts"))
+    test.assertTrue(hint.endswith("one-shot runs allow at most 2 children."))
+    # Pin the exact verified text; change this digest only with a deliberate guidance change.
+    test.assertEqual(hashlib.sha256(hint.encode()).hexdigest(), "b7d216a8071211b213a053012866f9cab41574f089fdf308b0d5f6bf216d37bc")
+
+
+class DistributionTemplateTest(unittest.TestCase):
+    def test_config_matches_template_byte_for_byte(self):
+        # setup_device.py refuses an initial bind unless config.yaml == templates/config.json.
+        self.assertEqual((ROOT / "config.yaml").read_bytes(), (ROOT / "templates/config.json").read_bytes())
+
+    def test_template_carries_tuned_settings_and_none_kept_off(self):
+        config = json.loads((ROOT / "templates/config.json").read_text())
+        assert_tuned_settings(self, config)
+        for key in ["web", "checkpoints", "tools"]:
+            self.assertNotIn(key, config)
+        self.assertNotIn("extra_body", config["providers"]["chatgpt-subscription"])
 
 
 class DeviceSetupTest(unittest.TestCase):
@@ -60,6 +90,18 @@ print(json.dumps({"status": "ready", "account_bound": True, "refresh_performed":
         for p in self.profile.rglob("*"):
             if p.is_file() and ".git" not in p.parts:
                 self.assertNotIn(b"synthetic-secret-never-share", p.read_bytes())
+
+    def test_bound_config_carries_tuned_settings(self):
+        self.configure()
+        bound = json.loads((self.profile / "config.yaml").read_text())
+        assert_tuned_settings(self, bound)
+        # Binding adds only device-local wiring; every shared setting comes from the template.
+        expected = json.loads((ROOT / "templates/config.json").read_text())
+        provider = expected["providers"]["chatgpt-subscription"]
+        provider["key_cmd"] = bound["providers"]["chatgpt-subscription"]["key_cmd"]
+        provider["extra_headers"] = {"ChatGPT-Account-ID": "test-account"}
+        expected["terminal"]["shell_init_files"] = bound["terminal"]["shell_init_files"]
+        self.assertEqual(bound, expected)
 
     def test_repeat_preserves_custom_config_and_history(self):
         self.configure()
