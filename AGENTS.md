@@ -1,6 +1,6 @@
 # Hermes device setup
 
-This is a private, curated Hermes profile distribution, never a copy of a live
+This is a public, curated Hermes profile distribution, never a copy of a live
 profile. Do not add credentials, account identifiers, user paths, memory,
 sessions, logs, cron jobs, or machine-specific integration files.
 
