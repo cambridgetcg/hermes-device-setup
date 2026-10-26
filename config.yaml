@@ -8,13 +8,16 @@
       "default_model": "gpt-6-astra",
       "key_cmd": "false",
       "discover_models": false,
-      "models": {"gpt-6-astra": {}}
+      "models": {"gpt-6-astra": {"supports_vision": true, "context_length": 872000}}
     }
   },
   "agent": {"reasoning_effort": "ultra", "max_turns": 60},
+  "compression": {"threshold": 0.6},
   "auth": {"adopt_external_logins": false},
   "terminal": {"backend": "local"},
+  "browser": {"inactivity_timeout": 900},
   "platform_toolsets": {"cli": ["hermes-cli"]},
+  "platform_hints": {"cli": {"append": "When work splits into independent parts and parallel effort would save time or improve quality, use delegate_task without waiting to be asked; the user's explicit wishes override this. Keep the step you are blocked on in your own hands and delegate bounded sidecar work (separate questions, disjoint code slices, an independent check) while you continue with what does not depend on it. Give each child a self-contained goal, the context it needs and a disjoint write scope, and tell it others may be editing nearby. Children do not see SOUL.md: tell them that stopping early, reporting a blocker, or finding nothing worth doing is a complete answer. Treat what returns as evidence to check, not fact: read the diff or source and rerun the deciding check, then integrate rather than redo. Delegation is a means, not a quota; small or tightly coupled work stays local, and one-shot runs allow at most 2 children."}},
   "telemetry": {"shared_metrics": {"enabled": false, "send": false}},
   "auxiliary": {"title_generation": {"model_upgrade_enabled": false, "provider": "custom:chatgpt-subscription"}},
   "plugins": {"enabled": [], "disabled": []}
